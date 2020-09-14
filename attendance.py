@@ -34,15 +34,20 @@ if __name__ == '__main__':
         sec_time = datetime.timedelta(hours=x.tm_hour, minutes=x.tm_min, seconds=x.tm_sec).total_seconds()
         df.at[idx, 'sec'] = sec_time
 
-    # join duplicate names' participation time
-    dup_name_list = list(set(df[df.duplicated(subset=['이름'], keep=False)==True]['이름'].tolist()))
-    for name in dup_name_list:
+    # for each duplicate student id, join the participation time
+    dup_id_list = list(set(df[df.duplicated(subset=['학번'], keep=False)==True]['학번'].tolist()))
+    for id in dup_id_list:
         total_part_time = 0
-        part_time_list = df.loc[df['이름'] == name]['sec'].tolist()
+        part_time_list = df.loc[df['학번'] == id]['sec'].tolist()
         for part_time in part_time_list:
             total_part_time += part_time
-        df.at[df.loc[df['이름']==name].index[0], 'sec'] = total_part_time
-    df = df.drop_duplicates(subset=['이름'], keep='first')
+        h = int(total_part_time) // 3600
+        m = (int(total_part_time) - (h * 3600)) // 60
+        s = int(total_part_time) % 60
+        total_part_time_str = "{:02d}:{:02d}:{:02d}".format(h, m, s)
+        df.at[df.loc[df['학번']==id].index[0], '참여시간'] = total_part_time_str
+        df.at[df.loc[df['학번']==id].index[0], 'sec'] = total_part_time
+    df = df.drop_duplicates(subset=['학번'], keep='first')
 
     # check attendance
     for idx, row in df.iterrows():
