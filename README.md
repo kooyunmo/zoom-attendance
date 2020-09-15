@@ -16,5 +16,5 @@ python attendance.py \
 - `-i` or `--input-file`: input .xlsx file name
 - `-t` or `--min-time`: the minimum time to admit attendance
 - `-s` or `--start-time`: the start time of the lecture (HH:MM)
-- `-l` or `--late-time`: students participating later than `start-time + late-time` are regarded as 'late'.
+- `-l` or `--late-time`: students participating later than `(start-time + late-time)` are regarded as 'late'.
 - `-o` or `--output-file`: output .xlsx file name
